@@ -1,0 +1,77 @@
+.cursor {
+  cursor: pointer;
+}
+.rounded {
+  border-radius: 5px;
+}
+.oval {
+  border-radius: 50%;
+}
+.status {
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 500;
+}
+.present {
+  color: #4caf50;
+  background-color: #f1f8e9;
+  border: 1px solid #4caf50;
+}
+.absent {
+  color: #f44336;
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+}
+.table {
+  font-size: 12px;
+  th, td {
+    margin: 0 40px !important;
+    width: 10% !important;
+    padding: 8px 0px !important;
+  }
+}
+.scroll-x {
+  overflow-x: auto;
+  @include mQ(600px){
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+}
+.img-crop {
+  border-radius: 50%;
+  padding: 14px;
+  width: 150px;
+  height: 150px;
+}
+
+// Profile image upload button
+[type=file].profile-image {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+.img-add-btn {
+  border: 50%;
+  position: absolute;
+  right: 10px;
+  bottom: 40px;
+  i {
+    padding: 5px;
+    border-radius: 50%;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    font-size: 20rem;
+    background-color: #2196f3;
+    color: #fff;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}

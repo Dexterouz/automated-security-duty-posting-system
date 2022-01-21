@@ -1,0 +1,143 @@
+{% extends "base.html" %} {% block title %} {{ title }} {% endblock title %} {%
+block content %}
+<h4 class="center-align">Add Duty</h4>
+{% for msg in success %}
+<div class="toast green active white-text bottom">
+  <i>done</i>
+  <span>{{ msg }}</span>
+</div>
+{% endfor %} {% if errors %}
+<div class="toast red active white-text bottom">
+  <i>error</i>
+  <span>You have an error</span>
+</div>
+{% endif %}
+<form action="add-duty.php" method="post">
+  <div class="container padding center-align middle-align">
+    <div class="card large-width">
+      <input type="hidden" name="duty_id" value="{{ data.duty_id }}" />
+      <div class="field label {% if errors.duty_err %} invalid {% endif %} border">
+        <input type="text" name="duty" value="{{ data.duty }}" />
+        <label>New Duty</label>
+        {% if errors.duty_err %}
+        <span class="error">{{ errors.duty_err }}</span>
+        {% endif %}
+      </div>
+      <div class="field label {% if errors.concentration_level_err %} invalid {% endif %} suffix border">
+        <select name="concentration_level">
+          <option></option>
+          {% for level in levels %}
+            <option {{ data.concentration_level == level ? 'selected' : '' }}>{{ level }}</option>
+          {% endfor %}
+        </select>
+        <i>arrow_drop_down</i>
+        <label>Concentration level</label>
+        {% if errors.concentration_level_err %}
+        <span class="error">{{ errors.concentration_level_err }}</span>
+        {% endif %}
+      </div>
+      <div class="row">
+        <div class="col s12 m6 l6">
+          <div class="field label {% if errors.from_err %} invalid {% endif %} border">
+            <input type="text" name="from" value="{{ data.period_from }}" />
+            <label>From e.g 8:00am</label>
+            {% if errors.from_err %}
+            <span class="error">{{ errors.from_err }}</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col s12 m6 l6">
+          <div class="field label {% if errors.to_err %} invalid {% endif %} border">
+            <input type="text" name="to" value="{{ data.period_to }}" />
+            <label>To e.g 6:00pm</label>
+            {% if errors.to_err %}
+            <span class="error">{{ errors.to_err }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% if not data %}
+      <div class="field app-color white-text rounded small large-width">
+        <input type="submit" class="cursor" name="add_duty" value="ADD DUTY" />
+      </div>
+      {% else %}
+      <div class="field app-color white-text rounded small large-width">
+        <input
+          type="submit"
+          class="cursor"
+          name="update_duty"
+          value="UPDATE DUTY"
+        />
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</form>
+
+<div class="card">
+  <table class="border medium table scroll-x">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>DUTY</th>
+        <th>CONCENTRATION LEVEL</th>
+        <th>PERIOD</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if duties %} {% for duty in duties %}
+      <tr>
+        <td>{{ duty.duty_id }}</td>
+        <td>{{ duty.duty }}</td>
+        <td>{{ duty.concentration_level }}</td>
+        <td>{{ duty.period_from }} - {{ duty.period_to }}</td>
+        <td>
+          <nav>
+            <button
+              type="button"
+              onclick="location.href='add-duty.php?id={{ duty.duty_id }}'"
+              class="none circle"
+            >
+              <i class="green-text">edit</i>
+            </button>
+            <button class="none circle" data-ui="#delete{{ duty.duty_id }}">
+              <i class="red-text">delete</i>
+            </button>
+          </nav>
+          <div id="delete{{duty.duty_id}}" class="modal rounded no-padding">
+            <div class="medium-padding center-align">
+              <i class="amber-text large">warning</i>
+              <form action="add-duty.php" method="post">
+                <input type="hidden" name="duty_id" value="{{duty.duty_id}}" />
+                <p class="medium-text">
+                  Are you sure you want to delete this duty?
+                </p>
+                <nav class="center-align">
+                  <button type="submit" name="delete_duty" class="red">
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    class="grey"
+                    data-ui="#delete{{ duty.duty_id }}"
+                  >
+                    Cancel
+                  </button>
+                </nav>
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="4">
+          <center><em>Duty Empty</em></center>
+        </td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

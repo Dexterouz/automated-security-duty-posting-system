@@ -1,0 +1,18 @@
+{
+  "require": {
+      "twig/twig": "^3.0",
+      "phpunit/phpunit": "^9",
+      "peppeocchi/php-cron-scheduler": "^4.0",
+    "tecnickcom/tcpdf": "^6.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "AutomatedRoster\\Controllers\\": "Controllers",
+      "AutomatedRoster\\Config\\": "Config"
+    }
+  },
+  "require-dev": {
+    "deployer/dist": "^6.8",
+    "deployer/recipes": "^6.2"
+  }
+}

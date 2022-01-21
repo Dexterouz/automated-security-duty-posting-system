@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../node_modules/beercss/dist/cdn/beer.min.css">
+  <link rel="stylesheet" href="../css/main.min.css">
+  <title>Automated Duty Roster :: {% block title %}{% endblock title %}</title>
+</head>
+<body>
+  <div id="body">
+    <div class="menu left m l">
+      <a href="../index.php"><img src="../images/unn-logo-1.jpg" class="circle small-margin"></a>
+      <a href="dashboard.php">
+        <i>dashboard</i>
+        <div>Dashboard</div>
+      </a>
+      <a href="all-staff.php">
+        <i>groups</i>
+        <div>All Staff</div>
+      </a>
+      <a href="add-staff.php">
+        <i>person_added</i>
+        <div>Add Staff</div>
+      </a>
+      <a href="add-duty.php">
+        <i>post_add</i>
+        <div>Add Duty</div>
+      </a>
+      <a href="logout.php">
+        <i>logout</i>
+        <div>Logout</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="menu bottom s">
+    <a href="dashboard.php">
+      <i>dashboard</i>
+      <div>Dashboard</div>
+    </a>
+    <a href="all-staff.php">
+      <i>groups</i>
+      <div>All Staff</div>
+    </a>
+    <a href="add-staff.php">
+      <i>person_added</i>
+      <div>Add Staff</div>
+    </a>
+    <a href="add-duty.php">
+      <i>post_add</i>
+      <div>Add Duty</div>
+    </a>
+    <a href="logout.php">
+      <i>logout</i>
+      <div>Logout</div>
+    </a>
+  </div>
+</div>
+  
+  <div id="layout">
+    <div class="container small-padding">
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </div>
+  </div>
+  <script src="../node_modules/beercss/dist/cdn/beer.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    ui();
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block content %}
+<h4 class="center-align">All Staff</h4>
+<div class="d-flex justify-between">
+
+</div>
+<div class="right-align">
+  <button type="button" class="green" onclick="location.href='add-staff.php'">
+    <span>Add new staff</span>
+    <i>add</i>
+  </button>
+</div>
+{% for msg in success %}
+<div class="toast green active white-text bottom">
+  <i>done</i>
+  <span>{{ msg }}</span>
+</div>
+{% endfor %}
+<div class="row">
+  <div class="col s12 m12 l12">
+    <div class="card scroll-x">
+      <table class="border medium scroll-x">
+        <thead>
+          <tr>
+            <th>PHOTO</th>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>EMAIL</th>
+            <th>PHONE</th>
+            <th>ON LEAVE</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if staffs is not null %}
+            {% for staff in staffs %}
+            <tr>
+              <td><img src="../images/passport/{{ staff.passport }}" alt=""></td>
+              <td>{{ staff.reg_no }}</td>
+              <td>{{ staff.fullname|title }}</td>
+              <td>{{ staff.email }}</td>
+              <td>{{ staff.phone }}</td>
+              <td>
+                <form action="all-staff.php" method="post">
+                  <label for="">{{ staff.on_leave|title }}</label>
+                  <input type="hidden" name="id" value="{{ staff.staff_id }}" id="">
+                  <input 
+                    type="checkbox" 
+                    name="on_leave" 
+                    onclick="markOnLeave('on_leave_{{ staff.staff_id }}', 'mark_leave_{{ staff.staff_id }}')" 
+                    id="on_leave_{{ staff.staff_id }}" 
+                    value="{{ (staff.on_leave == "off") ? "on" : "off" }}"
+                    {{ staff.on_leave == "on" ? "checked" : "" }}  
+                  >
+                  <input type="submit" value="" name="mark_leave" id="mark_leave_{{ staff.staff_id }}" class="d-none">
+                </form>
+              </td>
+              <td>
+                <nav>
+                  <button class="none circle" onclick="location.href='edit-staff.php?id={{staff.staff_id}}'">
+                    <i class="green-text">edit</i>
+                  </button>
+                  <button class="none circle" data-ui="#delete{{staff.staff_id}}">
+                    <i class="red-text">delete</i>
+                  </button>
+                </nav>
+                <div id="delete{{staff.staff_id}}" class="modal rounded no-padding">
+                  <div class="medium-padding center-align">
+                    <i class="amber-text large">warning</i>
+                    <form action="all-staff.php" method="post">
+                      <input type="hidden" name="staff_id" value="{{staff.staff_id}}">
+                      <p class="medium-text ">Are you sure you want to delete this staff?</p>
+                      <nav class="center-align">
+                        <button type="submit" name="delete" class="red">Delete</button>
+                        <button type="button" class="grey" data-ui="#delete{{staff.staff_id}}">Cancel</button>
+                      </nav>
+                    </form>
+                  </div>
+                </div>
+              </td>
+            </tr> 
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="6"><center><em>No Staff(s)</em></center></td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block content %}
+
+{% for msg in success %}
+<div class="toast green active white-text top">
+  <i>done</i>
+  <span>{{ msg }}</span>
+</div>
+{% endfor %}
+
+{% if error %}
+<div class="toast red active white-text top">
+  <i>error</i>
+  <span>{{ error.attendance_code_err }}</span>
+</div>
+{% endif %}
+
+<div class="scroll-x">
+  <table class="border table large">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>DUTY</th>
+        <th>PERIOD</th>
+        <th>DATE</th>
+        <th>STATUS</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rosters %}
+        {% for roster in rosters %}
+        <tr>
+          <td>{{ roster.reg_no }}</td>
+          <td>{{ roster.fullname|title }}</td>
+          <td>{{ roster.duty|title }}</td>
+          <td>{{ roster.period_from }} - {{ roster.period_to }}</td>
+          <td>{{ roster.date_created|date("m/d/Y") }}</td>
+          <td><span class="status {{ roster.status }}">{{ roster.status|title }}</span></td>
+          <td>
+            {% if roster.status == 'absent' %}
+            <button type="button" data-ui="#mark-attendance{{roster.staff_id}}">Login</button>
+            <div id="mark-attendance{{roster.staff_id}}" class="modal rounded no-padding">
+              <div class="small-padding d-flex justify-between align-center">
+                <span class="bold">Mark Attendance</span>
+                <button class="none circle grey-text" data-ui="#mark-attendance{{roster.staff_id}}"><i class="small">close</i></button>
+              </div>
+              <div class="divider no-margin"></div>
+              <div class="medium-padding center-align">
+                <form action="index.php" method="post">
+                  <input type="hidden" name="staff_id" value="{{roster.staff_id}}">
+                  <div class="field label border">
+                    <input type="text" name="attendance_code">
+                    <label>Attendance Code</label>
+                  </div>
+                  <button class="small green" type="submit">submit</button>
+                </form>
+              </div>
+            </div>
+            {% else %}
+            <button type="button" class="grey">login</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+      <tr><td colspan="7"><center><em>No Roster</em></center></td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

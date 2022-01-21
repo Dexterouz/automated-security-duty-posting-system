@@ -1,0 +1,43 @@
+/*
+===========================================
+****************FLEX STYLE****************
+===========================================
+*/
+.d-flex {
+  display: flex;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-start {
+justify-content: flex-start !important;
+}
+.justify-end {
+justify-content: flex-end;
+}
+.align-center {
+  align-items: center;
+}
+.align-start {
+  align-items: flex-start;
+}
+.align-end {
+  align-items: flex-end;
+}
+.flex-row {
+flex-direction: row !important;
+}
+.flex-column {
+flex-direction: column;
+}
+.column-sm {
+  @include mQ(600px) {
+      flex-direction: column;
+  }
+}
+.d-none {
+  display: none !important;
+}

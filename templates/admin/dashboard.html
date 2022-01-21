@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block content %}
+
+{% if error.export_err %}
+<div class="toast red active white-text top">
+  <i>error</i>
+  <span>{{ error.export_err }}</span>
+</div>
+{% endif %}
+
+{% if error.year_err or error.month_err %}
+<div class="toast red active white-text top">
+  <i>error</i>
+  <span>You have an error</span>
+</div>
+{% endif %}
+
+<h5>Dashboard</h5>
+<div class="row center-align rounded">
+  <div class="col s12 m4 l4">
+    <div class="card white left-align">
+      <!-- customers -->
+      <div class="d-flex align-center">
+        <div class="blue-light-4 white-text small-padding oval mr-5"><i class="medium-padding blue oval">groups</i></div>
+        <div class="small-margin">
+          <div class="medium-text grey-text semi-bold">Total Staff</div>
+          <div class="large-text bold">{{ total_staff }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 m4 l4">
+    <div class="card white left-align">
+      <!-- product -->
+      <div class="d-flex align-center">
+        <div class="green-light-4 white-text small-padding oval mr-5"><i class="medium-padding green oval">person_add_alt_outlined</i></div>
+        <div class="small-margin">
+          <div class="medium-text grey-text semi-bold">Staff Present</div>
+          <div class="large-text bold">{{ staff_present }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 m4 l4">
+    <div class="card white left-align">
+      <!-- orders -->
+      <div class="d-flex align-center">
+        <div class="red-light-4 white-text small-padding oval mr-5"><i class="medium-padding red oval">person_remove_outlined</i></div>
+        <div class="small-margin">
+          <div class="medium-text grey-text semi-bold">Staff Absent</div>
+          <div class="large-text bold">{{ staff_absent }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col s12 m12 l12">
+    <div class="card scroll-x">
+      <table class="border medium table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DUTY</th>
+            <th>PERIOD</th>
+            <th>DATE</th>
+            <th>CODE</th>
+            <th>STATUS</th>
+            {# <th>ACTION</th> #}
+          </tr>
+        </thead>
+        <tbody>
+          {% if rosters %}
+            {% for roster in rosters %}
+            <tr>
+              <td>{{ roster.reg_no }}</td>
+              <td>{{ roster.fullname|title }}</td>
+              <td>{{ roster.duty|title }}</td>
+              <td>{{ roster.period_from }} - {{ roster.period_to }}</td>
+              <td>{{ roster.date_created|date("m/d/Y") }}</td>
+              <td>{{ roster.attendance_code }}</td>
+              <td><span class="status {{ roster.status }}">{{ roster.status|title }}</span></td>
+              {# <td><button class="button none"><i class="grey-text">open_in_new_outlined</i></button></td> #}
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="7"><center><em>No Roster</em></center></td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="space"></div>
+<div class="row">
+  <div class="col s12 m12 l12">
+    <div class="card white">
+      <form action="dashboard.php" method="post">
+        <h5>Generate monthly report sheet</h5>
+        <div class="field label middle-align">
+          <label class="active">Export as:</label>
+          <nav>
+            <label class="radio">
+              <input type="radio" value="csv" checked name="doc_type">
+              <span>CSV File</span>
+            </label>
+            <label class="radio">
+              <input type="radio" value="pdf" name="doc_type">
+              <span>PDF File</span>
+            </label>
+          </nav>
+          <!-- <span class="error">Error text</span> -->
+        </div>
+        <div class="row">
+          <div class="col s12 m4 l4">
+            <div class="field label suffix {% if error.month_err %} invalid {% endif %} border">
+              <select name="month">
+                <option value=""></option>
+                <option value="january">January</option>
+                <option value="february">February</option>
+                <option value="march">March</option>
+                <option value="april">April</option>
+                <option value="may">May</option>
+                <option value="june">June</option>
+                <option value="july">July</option>
+                <option value="august">August</option>
+                <option value="september">September</option>
+                <option value="october">October</option>
+                <option value="november">November</option>
+                <option value="december">December</option>
+              </select>
+              <label class="active">Month</label>
+              <i>arrow_drop_down</i>
+              {% if error.month_err %}
+              <span class="error">{{ error.month_err }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col s12 m4 l4">
+            <div class="field label suffix {% if error.year_err %} invalid {% endif %} border">
+              <select name="year">
+                <option value=""></option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+              </select>
+              <label class="active">Year</label>
+              <i>arrow_drop_down</i>
+              {% if error.year_err %}
+              <span class="error">{{ error.year_err }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col s12 m4 l4">
+            <button type="submit" class="green no-margin">Export &nbsp;<i class="small">sim_card_download</i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="large-space"></div>
+{% endblock content %}

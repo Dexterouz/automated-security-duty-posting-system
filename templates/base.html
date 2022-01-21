@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block head %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="node_modules/beercss/dist/cdn/beer.min.css">
+  <link rel="stylesheet" href="css/main.min.css">
+  <title>Automated Duty Roster :: {% block title %}{% endblock title %}</title>
+  {% endblock head %}
+</head>
+<body>
+  <div id="nav">
+    <div class="menu left m l">
+      <a href="index.php"><img src="images/unn-logo-1.jpg" class="circle small-margin"></a>
+      {% if auth %}
+      <a href="admin/dashboard.php">
+        <i>dashboard</i>
+        <div>Dashboard</div>
+      </a>
+      {% endif %}
+      <a href="index.php">
+        <i>home</i>
+        <div>Home</div>
+      </a>
+      {% if not auth %}
+      <a href="admin_login.php">
+        <i>account_circle</i>
+        <div>Admin</div>
+      </a>
+      {% endif %}
+      <a data-ui="#about">
+        <i>info</i>
+        <div>About</div>
+      </a>
+    </div>
+
+    <div class="menu bottom s">
+      <a href="index.php">
+        <i>home</i>
+        <div>Home</div>
+      </a>
+      <a href="admin_login.php">
+        <i>account_circle</i>
+        <div>Admin</div>
+      </a>
+      <a data-ui="#about">
+        <i>info</i>
+        <div>About</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal rounded no-padding" id="about">
+  <div class="small-padding d-flex justify-between">
+    <span class="bold">About</span>
+    <button class="none circle grey-text" data-ui="#about"><i class="small">close</i></button>
+  </div>
+  <div class="divider no-margin"></div>
+    <div class="padding">
+      <div class="center-align">
+        <img src="images/unn-logo-1.jpg" class="circle medium" alt="">
+        <div class="space"></div>
+        <div class="center-align middle-align">
+          <span class="small-width bold">An Automated Security Duty Posting System created for the Security Department of the University of Nigeria Nsukka</span>
+        </div>
+        <div class="space"></div>
+        <div class="grey-text small-text">Copyright &copy; 2021 UNN Security Dept</div>
+      </div>
+  </div>
+  </div>
+  
+  <div id="layout">
+    <div class="center-align middle-align app-color padding">
+      <div>
+        <h4 class="white-text">Automated Security Duty Posting System</h4>
+        <img src="images/unn-logo-2.png" alt="">
+      </div>
+    </div>
+    <div class="container">
+      {% block content %}
+      {% endblock content %}
+    </div>
+    </div>
+  </div>
+  <script src="node_modules/beercss/dist/cdn/beer.min.js"></script>
+  <script>
+    ui();
+  </script>
+</body>
+</html>

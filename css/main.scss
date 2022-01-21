@@ -1,0 +1,8 @@
+$app-color: #005f34ff;
+
+.app-color {
+  background-color: $app-color;
+}
+@import '_media';
+@import '_display';
+@import '_utilities';
