@@ -13,7 +13,7 @@ trait Route
    * @param string $path Directory to page    
    * @return string
    **/
-  public static function route(string $path = null, string $sub_path = 'automated-security-duty-posting-system/')
+  public static function route(string $path = null, string $sub_path = '')
   {
     return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/{$sub_path}" . $path;
   }

@@ -154,7 +154,7 @@ class Account
           $_SESSION['username'] = $fetch['username'];
 
           // redirect url
-          $url = $this->route("admin/dashboard.php", "");
+          $url = $this->route("admin/dashboard.php");
 
           // redirect
           header("Location: {$url}");
