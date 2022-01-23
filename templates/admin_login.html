@@ -4,7 +4,7 @@ block content %}
 {% if errors %}
 <div class="toast red active white-text">
   <i>error</i>
-  <span>{{ errors.login_err }}</span>
+  {{ errors.login_err ?: 'Input error!' }}
 </div>
 {% endif %}
 <form action="admin_login.php" method="post">
