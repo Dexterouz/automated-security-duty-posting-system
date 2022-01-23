@@ -39,7 +39,7 @@ class Staff extends Duty
     $phone = $this->validate_text($phone, 'phone');
     $email = $this->validate_email($email);
     $gender = $this->validate_text($gender, 'gender');
-    $experience = $this->validate_text($experience, 'years of experience');
+    $experience = $this->validate_number($experience, 'years of experience');
     $age = $this->validate_number($age, 'age');
     $dissabilities = $this->validate_text($dissabilities, 'dissabilities');
     $on_leave = "off";
