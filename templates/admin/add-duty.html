@@ -6,7 +6,8 @@ block content %}
   <i>done</i>
   <span>{{ msg }}</span>
 </div>
-{% endfor %} {% if errors %}
+{% endfor %} 
+{% if errors %}
 <div class="toast red active white-text bottom">
   <i>error</i>
   <span>You have an error</span>
@@ -86,7 +87,8 @@ block content %}
       </tr>
     </thead>
     <tbody>
-      {% if duties %} {% for duty in duties %}
+      {% if duties %} 
+      {% for duty in duties %}
       <tr>
         <td>{{ duty.duty_id }}</td>
         <td>{{ duty.duty }}</td>
