@@ -33,7 +33,7 @@ create table rosters(
 create table duties(
   duty_id int(11) not null primary key auto_increment,
   duty varchar(250) not null,
-  period_from time not null,
-  period_to time not null,
+  period_from char(30) not null,
+  period_to char(30) not null,
   concentration_level smallint not null
 );
