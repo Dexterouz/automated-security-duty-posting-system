@@ -67,35 +67,6 @@ class Roster extends Staff
     return $flag;
   }
 
-  /**
-   * Assign Roster
-   *
-   * Shuffling and assigning rosters to staff
-   * @return bool
-   **/
-  // public function assignRoster()
-  // {
-  //   // if ($this->currentDay()) {
-  //     $flag = false;
-  //     $at_most_4_level = [];
-  //     $at_least_4_level = [];
-  //     $at_most_4yrs = $this->retrieveStaffByExperience(4, '>=');
-  //     $at_least_4yrs = $this->retrieveStaffByExperience(4, '<');
-
-  //     foreach ($this->retrieveDutyByConcentrationLevel(4, '>=') as $data) {
-  //       $at_most_4_level[] = $data['duty_id'];
-  //     }
-
-  //     foreach ($this->retrieveDutyByConcentrationLevel(4, '<') as $data) {
-  //       $at_least_4_level[] = $data['duty_id'];
-  //     }
-
-  //     $this->assign($at_most_4yrs, $at_most_4_level);
-  //     $this->assign($at_least_4yrs, $at_least_4_level);
-  //   // }
-  //   return $flag;
-  // }
-
   public function assignRoster()
   {
     $flag = false;
@@ -104,12 +75,6 @@ class Roster extends Staff
     $duties_at_least_4_level = [];
     $staffs_at_most_4yrs = $this->retrieveStaffByExperience(4, '>=');
     $staffs_at_least_4yrs = $this->retrieveStaffByExperience(4, '<');
-    // $duties = [];
-    // $staffs = $this->fetchStaffs();
-
-    // foreach ($this->fetchDuties() as $data) {
-    //   $duties[] = $data['duty_id'];
-    // }
 
     foreach ($this->retrieveDutyByConcentrationLevel(4, '>=') as $data) {
       $duties_at_most_4_level[] = $data['duty_id'];
@@ -124,29 +89,33 @@ class Roster extends Staff
 
     shuffle($at_most_4yrs);
     if ($this->currentDay()) {
-      for ($i=0; $i < count($at_most_4yrs); $i++) { 
-        $queryStmt = "INSERT INTO rosters(
-          staff_id, duty_id, attendance_code,
-          status, date_created
-        )
-        VALUES (?, ?, ?, ?, NOW())";
-        $execStmt = $this->connection->insert(
-          $queryStmt, 
-          ['iiis', $staffs_at_most_4yrs[$i]['staff_id'], $at_most_4yrs[$i], rand(30000, 90000), $status]
-        );
+      if (!empty($at_most_4yrs) && !empty($staffs_at_most_4yrs)) {
+        for ($i=0; $i < count($at_most_4yrs); $i++) { 
+          $queryStmt = "INSERT INTO rosters(
+            staff_id, duty_id, attendance_code,
+            status, date_created
+          )
+          VALUES (?, ?, ?, ?, NOW())";
+          $execStmt = $this->connection->insert(
+            $queryStmt, 
+            ['iiis', $staffs_at_most_4yrs[$i]['staff_id'], $at_most_4yrs[$i], rand(30000, 90000), $status]
+          );
+        }
       }
       
       shuffle($at_least_4yrs);
-      for ($i=0; $i < count($at_least_4yrs); $i++) { 
-        $queryStmt = "INSERT INTO rosters(
-          staff_id, duty_id, attendance_code,
-          status, date_created
-        )
-        VALUES (?, ?, ?, ?, NOW())";
-        $execStmt = $this->connection->insert(
-          $queryStmt, 
-          ['iiis', $staffs_at_least_4yrs[$i]['staff_id'], $at_least_4yrs[$i], rand(30000, 90000), $status]
-        );
+      if (!empty($at_least_4yrs) && !empty($staffs_at_least_4yrs)) {
+        for ($i=0; $i < count($at_least_4yrs); $i++) { 
+          $queryStmt = "INSERT INTO rosters(
+            staff_id, duty_id, attendance_code,
+            status, date_created
+          )
+          VALUES (?, ?, ?, ?, NOW())";
+          $execStmt = $this->connection->insert(
+            $queryStmt, 
+            ['iiis', $staffs_at_least_4yrs[$i]['staff_id'], $at_least_4yrs[$i], rand(30000, 90000), $status]
+          );
+        }
       }
     }
   }
