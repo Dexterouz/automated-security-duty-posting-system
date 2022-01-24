@@ -16,7 +16,7 @@ if (isset($_POST['mark_leave'])) {
 $staffs = $staff->fetchStaffs();
 $success = $staff->success ?? [];
 echo $twig->render(
-  'all-Staff.html',
+  'all-staff.html',
   [
     'title' => 'All Staff',
     'staffs' => $staffs,
