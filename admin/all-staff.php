@@ -10,6 +10,7 @@ if (isset($_POST['delete'])) {
 // Mark a staff as On/Off leave
 if (isset($_POST['mark_leave'])) {
   $staff->markOnLeave($_POST);
+  header("Refresh: 2");
 }
 
 $staffs = $staff->fetchStaffs();
