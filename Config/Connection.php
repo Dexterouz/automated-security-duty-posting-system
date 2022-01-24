@@ -20,7 +20,7 @@ class Connection
   public function __construct()
   {
     try {
-      $this->setEnvironment();
+      $this->setEnvironment("production");
       $this->connection = new mysqli($this->dbhost, $this->dbuser, $this->dbpassword, $this->dbname);
       if ($this->connection->connect_errno) {
         throw new Exception("Unable to connect to database...");
