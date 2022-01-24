@@ -34,32 +34,36 @@
       </a>
     </div>
   </div>
-
+  
   <div class="menu bottom s">
-    <a href="dashboard.php">
+    <a href="../index.php" class="front">
+      <i>home</i>
+      <div class="tooltip">Home</div>
+    </a>
+    <a href="dashboard.php" class="front">
       <i>dashboard</i>
-      <div>Dashboard</div>
+      <div class="tooltip">Dashboard</div>
     </a>
-    <a href="all-staff.php">
+    <a href="all-staff.php" class="front">
       <i>groups</i>
-      <div>All Staff</div>
+      <div class="tooltip">All Staff</div>
     </a>
-    <a href="add-staff.php">
+    <a href="add-staff.php" class="front">
       <i>person_added</i>
-      <div>Add Staff</div>
+      <div class="tooltip">Add Staff</div>
     </a>
-    <a href="add-duty.php">
+    <a href="add-duty.php" class="front">
       <i>post_add</i>
-      <div>Add Duty</div>
+      <div class="tooltip">Add Duty</div>
     </a>
-    <a href="logout.php">
+    <a href="logout.php" class="front">
       <i>logout</i>
-      <div>Logout</div>
+      <div class="tooltip">Logout</div>
     </a>
   </div>
 </div>
   
-  <div id="layout">
+  <div id="layout" style="margin-bottom: 80px;">
     <div class="container small-padding">
       {% block content %}
       {% endblock content %}

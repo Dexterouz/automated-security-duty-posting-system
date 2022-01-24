@@ -37,17 +37,25 @@
     </div>
 
     <div class="menu bottom s">
-      <a href="index.php">
+      {% if auth %}
+      <a href="admin/dashboard.php" class="front">
+        <i>dashboard</i>
+        <div class="tooltip">Dashboard</div>
+      </a>
+      {% endif %}
+      <a href="index.php" class="front">
         <i>home</i>
-        <div>Home</div>
+        <div class="tooltip">Home</div>
       </a>
-      <a href="admin_login.php">
+      {% if not auth %}
+      <a href="admin_login.php" class="front">
         <i>account_circle</i>
-        <div>Admin</div>
+        <div class="tooltip">Admin</div>
       </a>
-      <a data-ui="#about">
+      {% endif %}
+      <a data-ui="#about" class="front">
         <i>info</i>
-        <div>About</div>
+        <div class="tooltip">About</div>
       </a>
     </div>
   </div>

@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% block title %} {{ title }} {% endblock title %} {%
 block content %}
 <h4 class="center-align">Admin Login</h4>
-{% if errors %}
-<div class="toast red active white-text">
+{% if not (errors is empty) %}
+<div class="toast red active white-text top">
   <i>error</i>
   {{ errors.login_err ?: 'Input error!' }}
 </div>
