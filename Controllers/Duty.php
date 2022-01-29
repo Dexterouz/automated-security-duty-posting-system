@@ -30,19 +30,17 @@ class Duty
   {
     extract($request);
     $duty = $this->validate_text($duty, "duty");
-    $from = $this->validate_text($from, "from");
-    $to = $this->validate_text($to, "to");
     $concentration_level = $this->validate_text($concentration_level, 'concentration level');
 
     // if no error
     if ($this->flag) {
       try {
         $queryStmt = "INSERT INTO {$this->table} (
-          duty, period_from, period_to, concentration_level
-        ) VALUES (?, ?, ?, ?)";
+          duty, concentration_level
+        ) VALUES (?, ?)";
         $execStmt = $this->connection->insert(
           $queryStmt,
-          ['sssi', $duty, $from, $to, $concentration_level]
+          ['si', $duty, $concentration_level]
         );
 
         // if true
@@ -139,19 +137,16 @@ class Duty
     extract($request);
     $duty_id = $this->validate_number($duty_id);
     $duty = $this->validate_text($duty, "duty");
-    $from = $this->validate_text($from, "from period");
-    $to = $this->validate_text($to, "to period");
     $concentration_level = $this->validate_number($concentration_level, 'concentration level');
 
     // if no error
     if ($this->flag) {
       try {
         $queryStmt = "UPDATE {$this->table} SET
-          duty = ?, period_from = ?, period_to = ?,
-          concentration_level = ? WHERE duty_id = ?";
+          duty = ?, concentration_level = ? WHERE duty_id = ?";
         $execStmt = $this->connection->update(
           $queryStmt,
-          ['sssii', $duty, $from, $to, $concentration_level, $duty_id]
+          ['sii', $duty, $concentration_level, $duty_id]
         );
 
         // if true

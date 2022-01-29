@@ -69,6 +69,7 @@
             <th>ID</th>
             <th>NAME</th>
             <th>DUTY</th>
+            <th>SHIFT</th>
             <th>PERIOD</th>
             <th>DATE</th>
             <th>CODE</th>
@@ -82,7 +83,8 @@
               <td>{{ roster.reg_no }}</td>
               <td>{{ roster.fullname|title }}</td>
               <td>{{ roster.duty|title }}</td>
-              <td>{{ roster.period_from }} - {{ roster.period_to }}</td>
+              <td>{{ roster.shift|title }}</td>
+              <td>{{ roster.periods }}</td>
               <td>{{ roster.date_created|date("m/d/Y") }}</td>
               <td>{{ roster.attendance_code }}</td>
               <td><span class="status {{ roster.status }}">{{ roster.status|title }}</span></td>

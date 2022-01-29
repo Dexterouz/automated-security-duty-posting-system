@@ -37,26 +37,6 @@ block content %}
         <span class="error">{{ errors.concentration_level_err }}</span>
         {% endif %}
       </div>
-      <div class="row">
-        <div class="col s12 m6 l6">
-          <div class="field label {% if errors.from_err %} invalid {% endif %} border">
-            <input type="text" name="from" value="{{ data.period_from }}" />
-            <label>From e.g 8:00am</label>
-            {% if errors.from_err %}
-            <span class="error">{{ errors.from_err }}</span>
-            {% endif %}
-          </div>
-        </div>
-        <div class="col s12 m6 l6">
-          <div class="field label {% if errors.to_err %} invalid {% endif %} border">
-            <input type="text" name="to" value="{{ data.period_to }}" />
-            <label>To e.g 6:00pm</label>
-            {% if errors.to_err %}
-            <span class="error">{{ errors.to_err }}</span>
-            {% endif %}
-          </div>
-        </div>
-      </div>
       {% if not data %}
       <div class="field app-color white-text rounded small large-width">
         <input type="submit" class="cursor" name="add_duty" value="ADD DUTY" />
@@ -82,7 +62,6 @@ block content %}
         <th>ID</th>
         <th>DUTY</th>
         <th>CONCENTRATION LEVEL</th>
-        <th>PERIOD</th>
         <th>ACTION</th>
       </tr>
     </thead>
@@ -90,10 +69,9 @@ block content %}
       {% if duties %} 
       {% for duty in duties %}
       <tr>
-        <td>{{ duty.duty_id }}</td>
+        <td>{{ loop.index }}</td>
         <td>{{ duty.duty }}</td>
         <td>{{ duty.concentration_level }}</td>
-        <td>{{ duty.period_from }} - {{ duty.period_to }}</td>
         <td>
           <nav>
             <button

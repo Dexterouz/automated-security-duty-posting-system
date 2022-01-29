@@ -69,51 +69,67 @@ class Roster extends Staff
 
   public function assignRoster()
   {
-    $flag = false;
     $status = "absent";
-    $duties_at_most_4_level = [];
-    $duties_at_least_4_level = [];
-    $staffs_at_most_4yrs = $this->retrieveStaffByExperience(4, '>=');
-    $staffs_at_least_4yrs = $this->retrieveStaffByExperience(4, '<');
+    $shifts = []; // Available shifts
+    $duties_at_most_4_level = []; // Duties with concentration level < 4
+    $duties_at_least_4_level = []; // Duties with concentration level >= 4
+    $staffs_at_least_4yrs = $this->retrieveStaffByExperience(4, '>='); // Retrieve staff with greater than or equal to 4yrs of experience
+    $staffs_at_most_4yrs = $this->retrieveStaffByExperience(4, '<'); // Retrieve staff with less than 4yrs of experience
 
     foreach ($this->retrieveDutyByConcentrationLevel(4, '>=') as $data) {
-      $duties_at_most_4_level[] = $data['duty_id'];
+      $duties_at_least_4_level[] = $data['duty_id'];
     }
 
     foreach ($this->retrieveDutyByConcentrationLevel(4, '<') as $data) {
-      $duties_at_least_4_level[] = $data['duty_id'];
+      $duties_at_most_4_level[] = $data['duty_id'];
     }
-    
-    $at_most_4yrs = $this->mapArray($staffs_at_most_4yrs, $duties_at_most_4_level);
-    $at_least_4yrs = $this->mapArray($staffs_at_least_4yrs, $duties_at_least_4_level);
 
-    shuffle($at_most_4yrs);
+    foreach ($this->shifts() as $data) {
+      $shifts[] = $data['shift_id'];
+    }
+
+    $at_least_4yrs = $this->mapArray($staffs_at_least_4yrs, $duties_at_least_4_level); // Retrieve duties for staff with atleast 4yrs experience
+    $at_most_4yrs = $this->mapArray($staffs_at_most_4yrs, $duties_at_most_4_level); // Retrieve duties for staff with atmost 4yrs experience
+    $shift_for_staff_atleast_4yrs = $this->mapArray($staffs_at_least_4yrs, $shifts);
+    $shift_for_staff_atmost_4yrs = $this->mapArray($staffs_at_most_4yrs, $shifts);
+
+    shuffle($at_least_4yrs);
+    shuffle($shift_for_staff_atleast_4yrs);
     if ($this->currentDay()) {
-      if (!empty($at_most_4yrs) && !empty($staffs_at_most_4yrs)) {
-        for ($i=0; $i < count($at_most_4yrs); $i++) { 
+      if (!empty($at_least_4yrs) && !empty($staffs_at_least_4yrs)) {
+        for ($i=0; $i < count($at_least_4yrs); $i++) { 
           $queryStmt = "INSERT INTO rosters(
-            staff_id, duty_id, attendance_code,
-            status, date_created
+            staff_id, duty_id, shift_id, 
+            attendance_code, status, date_created
           )
-          VALUES (?, ?, ?, ?, NOW())";
+          VALUES (?, ?, ?, ?, ?, NOW())";
           $execStmt = $this->connection->insert(
             $queryStmt, 
-            ['iiis', $staffs_at_most_4yrs[$i]['staff_id'], $at_most_4yrs[$i], rand(30000, 90000), $status]
+            [
+              'iiiis', $staffs_at_least_4yrs[$i]['staff_id'], 
+              $at_least_4yrs[$i], $shift_for_staff_atleast_4yrs[$i], 
+              rand(3000, 9000), $status
+            ]
           );
         }
       }
       
-      shuffle($at_least_4yrs);
-      if (!empty($at_least_4yrs) && !empty($staffs_at_least_4yrs)) {
-        for ($i=0; $i < count($at_least_4yrs); $i++) { 
+      shuffle($at_most_4yrs);
+      shuffle($shift_for_staff_atmost_4yrs);
+      if (!empty($at_most_4yrs) && !empty($staffs_at_most_4yrs)) {
+        for ($i=0; $i < count($at_most_4yrs); $i++) { 
           $queryStmt = "INSERT INTO rosters(
-            staff_id, duty_id, attendance_code,
-            status, date_created
+            staff_id, duty_id, shift_id,
+            attendance_code, status, date_created
           )
-          VALUES (?, ?, ?, ?, NOW())";
+          VALUES (?, ?, ?, ?, ?, NOW())";
           $execStmt = $this->connection->insert(
             $queryStmt, 
-            ['iiis', $staffs_at_least_4yrs[$i]['staff_id'], $at_least_4yrs[$i], rand(30000, 90000), $status]
+            [
+              'iiiis', $staffs_at_most_4yrs[$i]['staff_id'], 
+              $at_most_4yrs[$i], $shift_for_staff_atmost_4yrs[$i], 
+              rand(3000, 9000), $status
+            ]
           );
         }
       }
@@ -212,9 +228,12 @@ class Roster extends Staff
     try {
       $queryStmt = "SELECT stf.staff_id, stf.fullname, stf.reg_no,
       ros.staff_id, ros.duty_id, ros.status, ros.attendance_code,  
-      ros.date_created, dty.duty, dty.period_from, dty.period_to  
-      FROM staffs AS stf INNER JOIN rosters AS ros ON stf.staff_id = ros.staff_id 
-      INNER JOIN duties AS dty ON ros.duty_id = dty.duty_id 
+      ros.date_created, dty.duty, dty.period_from, dty.period_to,
+      sft.shift, sft.periods
+      FROM staffs AS stf 
+        INNER JOIN rosters AS ros ON stf.staff_id = ros.staff_id 
+        INNER JOIN duties AS dty ON ros.duty_id = dty.duty_id
+        INNER JOIN shifts AS sft ON ros.shift_id = sft.shift_id
       WHERE ros.date_created = DATE(CURDATE())
       ";
       $execStmt = $this->connection->select($queryStmt);
@@ -228,5 +247,29 @@ class Roster extends Staff
       print "An Error has occurred! Message: {$e->getMessage()}";
     }
     return $result ?? [];
+  }
+
+  /**
+   * Shifts
+   *
+   * Retrieving all available shifts
+   * @return array
+   * @throws Exception
+   **/
+  public function shifts()
+  {
+    $result = [];
+    try {
+      $execStmt = $this->connection->select("SELECT * FROM shifts");
+      if ($execStmt) {
+        while ($row = $execStmt->fetch_assoc()) {
+          $result[] = $row;
+        }
+      }
+    } catch (Exception $e) {
+      print "An error occurred!. Message: {$e->getMessage()}";
+    }
+
+    return $result;
   }
 }
