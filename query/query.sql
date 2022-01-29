@@ -23,11 +23,13 @@ create table rosters(
   roster_id int(11) not null primary key auto_increment,
   staff_id int(11) not null,
   duty_id int(11) not null,
+  shift_id int(11) not null,
   attendance_code int(11) not null,
   status enum('present', 'absent') not null,
   date_created date,
   FOREIGN KEY (staff_id) REFERENCES staffs(staff_id),
-  FOREIGN KEY (duty_id) REFERENCES duties(duty_id)
+  FOREIGN KEY (duty_id) REFERENCES duties(duty_id),
+  FOREIGN KEY (shift_id) REFERENCES shifts(shift_id)
 );
 
 create table duties(
@@ -36,4 +38,11 @@ create table duties(
   period_from char(30) not null,
   period_to char(30) not null,
   concentration_level smallint not null
+);
+
+create table shifts(
+  shift_id int(11) not null primary key auto_increment,
+  shift char(40) not null,
+  from_period char(30) not null,
+  to_period char(30) not null
 );
