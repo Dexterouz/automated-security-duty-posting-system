@@ -22,15 +22,19 @@
 <form action="edit-staff.php?id={{ data.staff_id }}" method="post" enctype="multipart/form-data">
   <div class="center-align middle-align">
     <div class="">
-      <div class="profile-wrapper">
-        <img src="../images/passport/{{ data.passport }}" class="img-crop" alt="">
-        <label for="image" class="img-add-btn" id="img-add-btn">
-          <i class="blue-dark-1">add_photo_alternate_sharp</i>
-        </label>
-        <input type="hidden" name="staff_id" value="{{ data.staff_id }}">
-        <input type="file" class="profile-image" id="image" name="photo">
+      <div>
+        <div class="profile-wrapper">
+            <img src="../images/passport/{{ data.passport }}" class="img-crop" alt="">
+            <label for="image" class="img-add-btn" id="img-add-btn"><i class="blue-dark-1">add_photo_alternate_sharp</i></label>
+            <input type="hidden" name="staff_id" value="{{ data.staff_id }}">
+            <input type="file" class="profile-image" id="image" name="image">
+            <input type="hidden" id="images" name="photo" value="">
+        </div>
+        <div class="crop-wrapper">
+            <div class="image-crop"></div>
+            <button type="submit" class="green" name="change_photo" id="change">Change Picture</button>
+        </div>
       </div>
-      <div><button type="submit" name="change_photo" class="green">change photo</button></div>
       <span class="small-text red-text">
         {% if errors.passport_photo_err %} 
           {{ errors.passport_photo_err }} 

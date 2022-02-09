@@ -2,9 +2,9 @@
 include 'include.php';
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-  $staff->registerStaff($_POST, $_FILES);
+  $staff->registerStaff($_POST);
   // refresh page in 3s
-  header('Refresh: 2');
+  header('Refresh: 3');
 }
 
 $errors = $staff->error ?? [];

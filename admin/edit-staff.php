@@ -4,7 +4,7 @@ $id = (int) $_GET['id'] ?? null;
 
 // change passport photo
 if (isset($_POST['change_photo'])) {
-  $staff->updatePassportPhoto($_POST, $_FILES);
+  $staff->updatePassportPhoto($_POST);
   header("Refresh: 3");
 }
 

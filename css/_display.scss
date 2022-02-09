@@ -41,3 +41,82 @@ flex-direction: column;
 .d-none {
   display: none !important;
 }
+
+.app-title {
+  @include mQ(600px) {
+    font-size: 24px;
+  }
+}
+
+.app-image {
+  @include mQ(600px) {
+    width: 30%;
+  }
+}
+
+// PASSPORT UPLOAD STYLE
+.img-crop {
+  border-radius: 50%;
+  padding: 14px;
+  width: 200px;
+  height: 200px;
+}
+.order-product-img {
+  width: 120px;
+  height: 120px;
+  padding: 6px 3px;
+  border-radius: 3px;
+  @include mQ(600px){
+    width: 90px;
+    height: 90px;
+  }
+  // background-color: red;
+}
+.img-add-btn {
+  border: 50%;
+  position: absolute;
+  right: 20px;
+  bottom: 40px;
+  i {
+    padding: 5px;
+    border-radius: 50%;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    font-size: 20rem;
+    background-color: #2196f3;
+    color: #fff;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+[type=file].profile-image {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+.img-add-btn {
+  border: 50%;
+  position: absolute;
+  right: 20px;
+  bottom: 40px;
+  i {
+    padding: 5px;
+    border-radius: 50%;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    font-size: 20rem;
+    background-color: #2196f3;
+    color: #fff;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -24,15 +24,13 @@ class Staff extends Duty
    * Register new staff
    *
    * @param array $request Form data request
-   * @param array $file Form file request
    * @return bool
    * @throws Exception
    **/
-  public function registerStaff(array $request, array $file): bool
+  public function registerStaff(array $request): bool
   {
     // dump array as variable
     extract($request);
-    extract($file);
 
     // sanitize and validate input
     $fullname = $this->validate_text($fullname, 'fullname');
@@ -44,13 +42,13 @@ class Staff extends Duty
     $dissabilities = $this->validate_text($dissabilities, 'dissabilities');
     $on_leave = "off";
     $reg_no = "UNN" . rand(10000, 90000);
-    $passport_photo = $this->validate_image($photo['name'], 'passport photo');
+    $passport_photo = $this->validate_text($photo, 'passport photo');
 
     // if there's no error
     if ($this->flag) {
       try {
-        $ext = pathinfo($passport_photo, PATHINFO_EXTENSION);
-        $passport_photo = $reg_no . "." . $ext;
+        $ext = '.png';
+        $image_name = $reg_no . '-' .time(). $ext;
         $exec_stmt = $this->connection->insert(
           "INSERT INTO {$this->table} 
           (
@@ -63,7 +61,7 @@ class Staff extends Duty
           [
             'ssisssssss', $fullname, $gender, 
             $age, $phone, $email, $dissabilities, 
-            $experience, $on_leave, $reg_no, $passport_photo
+            $experience, $on_leave, $reg_no, $image_name
           ]
         );
 
@@ -71,9 +69,9 @@ class Staff extends Duty
         if ($exec_stmt) {
           $this->success[] = "New Staff Added Successfully!";
 
-          $directory = "../images/passport/{$passport_photo}";
-          if (!move_uploaded_file($photo['tmp_name'], $directory)) {
-            throw new Exception("Error in uploading passport photo");
+          $directory = "../images/passport/{$image_name}";
+          if(!file_put_contents($directory, base64_decode($passport_photo))) {
+            throw new Exception("Error in uploading profile image", 1);
           }
 
           return true;
@@ -259,35 +257,34 @@ class Staff extends Duty
    * @param array $file Form data file request
    * @return bool
    **/
-  public function updatePassportPhoto(array $request, array $file)
+  public function updatePassportPhoto(array $request)
   {
     extract($request);
-    extract($file);
 
     // sanitize input
     $staff_id = $this->validate_number($staff_id);
-    $passport_photo = $this->validate_image($photo['name'], "passport photo");
+    $passport_photo = $this->validate_text($photo, "passport photo");
 
     // if true
     if ($this->flag) {
       $staff_data = $this->fetchStaff($staff_id); // retrieve staff reg no
-      $ext = pathinfo($passport_photo, PATHINFO_EXTENSION); // retrieve image file extension
-      $new_photo = $staff_data['reg_no'] . "." . $ext;
+      $ext = '.png';
+      $new_image_name = $staff_data['reg_no'] . '-' .time(). $ext;
 
       // delete old passport photo
       $old_passport_photo = "../images/passport/{$staff_data['passport']}";
       unlink($old_passport_photo);
 
       $queryStmt = "UPDATE {$this->table} SET passport = ? WHERE staff_id = ?";
-      $execStmt = $this->connection->update($queryStmt, ['si', $new_photo, $staff_id]);
+      $execStmt = $this->connection->update($queryStmt, ['si', $new_image_name, $staff_id]);
 
       // if true
       if ($execStmt) {
         $this->success[] = "Passport photo updated successfully!";
-        $directory = "../images/passport/{$new_photo}";
+        $directory = "../images/passport/{$new_image_name}";
         // throw an exception if there's an error
-        if (!move_uploaded_file($photo['tmp_name'], $directory)) {
-          throw new Exception("Error in updating staff passport photo");
+        if(!file_put_contents($directory, base64_decode($passport_photo))) {
+          throw new Exception("Error in updating profile image", 1);
         }
         return true;
       }
