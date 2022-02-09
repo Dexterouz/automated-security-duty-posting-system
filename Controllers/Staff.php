@@ -224,6 +224,30 @@ class Staff extends Duty
   }
 
   /**
+   * Get the number of staff on/off leave
+   *
+   * @param string $status Staff on/off leave status
+   * @return int
+   * @throws Exception
+   **/
+  public function staffsTotalLeaveCount(string $status = 'on')
+  {
+    try {
+      $queryStmt = "SELECT on_leave FROM {$this->table} WHERE on_leave = ?";
+      $execStmt = $this->connection->select($queryStmt, ['s', $status]);
+
+      if ($execStmt) {
+        $count = $execStmt->num_rows;
+        return $count;
+      }
+    } catch (Exception $e) {
+      print "An Error occurred!. Message: $e->getMessage()";
+    }
+
+    return 0;
+  }
+
+  /**
    * Mark a staff On/Off leave
    *
    * @param array $request Form data request
@@ -236,16 +260,22 @@ class Staff extends Duty
     $on_leave = $this->validate_text($on_leave ?? 'off');
     
     if ($this->flag) {
-      $queryStmt = "UPDATE {$this->table} SET on_leave = ? WHERE staff_id = ?";
-      $execStmt = $this->connection->update(
-        $queryStmt, ['si', $on_leave, $id]
-      );
+      // Get the number of staffs on leave
+      $staffs_on_leave = $this->staffsTotalLeaveCount();
+      if ($staffs_on_leave < 3 || $on_leave == 'off') {
+        $queryStmt = "UPDATE {$this->table} SET on_leave = ? WHERE staff_id = ?";
+        $execStmt = $this->connection->update(
+          $queryStmt, ['si', $on_leave, $id]
+        );
 
-      // fetch staff name
-      $staff = $this->fetchStaff($id)['fullname'];
+        // fetch staff name
+        $staff = $this->fetchStaff($id)['fullname'];
 
-      if ($execStmt) {
-        $this->success[] = "Staff {$staff} has been mark {$on_leave} leave";
+        if ($execStmt) {
+          $this->success[] = "Staff {$staff} has been mark {$on_leave} leave";
+        }
+      } else {
+        $this->error[] = "Maximum number of leave for staffs exceeded";
       }
     }
   }

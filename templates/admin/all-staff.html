@@ -15,10 +15,19 @@
     <i>add</i>
   </button>
 </div>
+<!-- success message -->
 {% for msg in success %}
 <div class="toast green active white-text bottom">
   <i>done</i>
   <span>{{ msg }}</span>
+</div>
+{% endfor %}
+
+<!-- error message -->
+{% for error in errors %}
+<div class="toast red active white-text bottom">
+  <i>error</i>
+  <span>{{ error }}</span>
 </div>
 {% endfor %}
 <div class="row">
